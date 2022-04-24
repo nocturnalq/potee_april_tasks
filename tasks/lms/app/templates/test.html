@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if correct is not none %}
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+    <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            {% if correct==True %}
+            <h2 class="me-auto text-success"><strong>Correct!</strong></h2>
+            {% else %}
+            <h2 class="me-auto text-danger"><strong>Incorrect!</strong></h2>
+            {% endif %}
+
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <b>{{ question }}</b> {{ answer }}
+        </div>
+    </div>
+</div>
+{% endif %}
+<p></p>
+<div class="card">
+    <form method="post">
+        {% if data.type == "single" %}
+        <div class="card-header">
+            {% if note %}
+            <p class="text-monospace">{{ note }}</p>
+            {% endif %}
+            <h2>{{ data.question }}</h2>
+        </div>
+
+        <div class="card-body">
+            {% for answer in data.variants %}
+
+            <div class="form-check py-1">
+                <input class="form-check-input" type="radio" name="variants" value="{{loop.index}}"
+                       id="{{loop.index}}">
+                <label class="form-check-label" for="{{loop.index}}">{{answer}}</label>
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-success">Submit</button>
+
+        </div>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

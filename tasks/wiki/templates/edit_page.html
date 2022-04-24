@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="post">
+        <div class="form-group">
+            <label for="exampleFormControlInput1">Filename</label>
+            <input type="text" class="form-control" id="exampleFormControlInput1" name="filename" value="{{ filename }}"
+                   placeholder="page.md">
+        </div>
+        <div class="form-group">
+            <label for="exampleFormControlTextarea1">Page</label>
+            <textarea class="form-control" id="exampleFormControlTextarea1" name="text" rows="10">{{ text }}</textarea>
+        </div>
+        {% if error %}
+        <div>
+            <p class="text-danger">{{error}}</p>
+        </div>
+        {% endif %}
+
+        <div>
+            <button type="submit" class="btn btn-outline-success btn-sm">Save changes</button>
+        </div>
+    </form>
+{% endblock %}

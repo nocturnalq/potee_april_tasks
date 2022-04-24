@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p></p>
+<div class="card shadow p-3 mb-5 bg-white rounded">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-6">
+
+                    <div class="form-group">
+                        <label for="Name">Device name</label>
+                        <input type="text" class="form-control" name="name" id="Name" placeholder="Door">
+                    </div>
+                    <div class="form-group">
+                        <label for="IP">Device IP</label>
+                        <input type="text" class="form-control" name="ip" id="IP"
+                               placeholder="192.168.X.X">
+                    </div>
+
+                    <select name="role" id="Role" class="form-control">
+                        <option selected>Employe</option>
+                        <option>...</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                        Описание
+                </div>
+            </div>
+
+            <p></p>
+            <button type="submit" class="btn btn-success">Добавить</button>
+            .
+        </form>
+    </div>
+</div>
+{% endblock %}

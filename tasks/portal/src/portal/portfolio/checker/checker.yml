@@ -1,0 +1,8 @@
+services:
+  - name: ExampleTask
+    cost: 3
+    hp: 1000
+    put:
+      - name: put.py
+    check:
+      - name: get.py

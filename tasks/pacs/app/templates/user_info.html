@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<p></p>
+<div class="card shadow p-3 mb-5 bg-white rounded">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-6">
+
+                    <div class="form-group">
+                        <label for="Name">Name</label>
+                        <input type="text" class="form-control" name="name" id="Name" value="{{user['firstname']}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="Secondname">Secondname</label>
+                        <input type="text" class="form-control" name="secondname" id="Secondname"
+                               value="{{user['secondname']}}">
+                    </div>
+                    <div class="container1" id="container1" >
+                        {% for card in user.card %}
+                        <div class="form-group" id="divcard{{ loop.index }}">
+
+                            <label for="Card{{ loop.index }}">Card {% if loop.first %}
+                                <button type="button" id="addfield" class="btn btn-outline-info btn-sm add_form_field">Add card
+                                </button>
+                                {% else %}{{ loop.index }}{% endif %}</label>
+                            <div class="row">
+                                <div class="col-10">
+                            <input type="text" id="Card{{ loop.index }}" class="form-control" name="card[]"
+                                   value="{{card}}">
+                            {% if loop.first %}
+                            {% else %}
+                            <a href="#" class="delete">Delete</a>
+                            {% endif %}
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-secondary" onclick="auto_button('Card{{ loop.index }}')">Auto</button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="form-group">
+                        <label for="Role">Role</label>
+                        <select name="role" id="Role" class="form-control">
+                            <option selected>{{user['role']}}</option>
+                            <option>...</option>
+                        </select>
+                    </div>
+                    <label for="Role">Gates</label><br>
+                    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                        {% for gate in gates %}
+                        <label class="btn btn-outline-success">
+                            <input type="checkbox" name="gate" value="{{gate['name']}}" {% if gate['name'] in
+                            user['gates'] %} checked {% endif %}autocomplete="off">
+                            {{gate['name']}}
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col">
+                            <figure class="figure">
+                                <img src="{{url_for('static', filename='img/default.png')}}"
+                                     class="rounded mx-auto d-block" alt="...">
+                            </figure>
+                            <div class="form-group">
+                                <label for="image">Upload Photo</label>
+                                <input type="file" class="form-control-file" name="image" id="image">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            Статистика
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <p></p>
+            <button type="submit" class="btn btn-success">Сохранить</button>
+        </form>
+
+    </div>
+</div>
+<script>
+    function auto_button(id) {
+        //alert('hi');
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", '/last_denied', true);
+        xhr.send();
+        xhr.onload = function () {
+            document.getElementById(id).value = xhr.response.toString();
+            console.log(xhr.response)
+        }
+
+    }
+
+    $(document).ready(function () {
+        var max_fields = 10;
+        var wrapper = $(".container1");
+        var add_button = $(".add_form_field");
+
+        var x = {{ user['card']|length }};
+        console.log(x)
+        $(add_button).click(function (e) {
+            e.preventDefault();
+            if (x < max_fields) {
+                x++;
+                $(wrapper).append('<div class="form-group" id="divcard'+ x + '">\n' +
+                    '                            <label for="Card">Card ' + x +
+                    '                            </label>\n' +
+                    '                            <div class="row">\n' +
+                    '                                <div class="col-10">\n' +
+                    '                                    <input type="text" class="form-control" name="card[]" id="Card' + x + '" value="{{card}}">\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-2">\n' +
+                    '<button type="button" class="btn btn-secondary" onclick="auto_button(\'Card'+ x + '\')">auto</button>\n' +
+                    '                                </div>\n' +
+                    '                            </div>\n' +
+                    '                        <a href="#" class="delete">Delete</a></div>'); //add input box
+            } else {
+                alert('You Reached the limits')
+            }
+        });
+
+        $(wrapper).on("click", ".delete", function (e) {
+            e.preventDefault();
+            console.log(x)
+            var elem = document.querySelector("#divcard"+x)
+            elem.remove()
+            //$("div.divcard"+x).remove();
+            x--;
+        })
+    });
+</script>
+{% endblock %}

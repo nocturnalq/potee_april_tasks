@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h3>Список страниц</h3>
+    {% if pages %}
+        <div class="list-group list-group-flush">
+            {% for page in pages %}
+                <a href="{{ url_for('show_pages', page_id=page) }}"
+                   class="list-group-item list-group-item-action">{{ page }}</a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>{{ error }}</p>
+    {% endif %}
+{% endblock %}

